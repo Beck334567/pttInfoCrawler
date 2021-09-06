@@ -78,7 +78,7 @@ namespace pttInfoCrawler
                    new
                    {
                        type = "text",
-                       text = "查詢時間:"+DateTime.Now.ToString()+"\n"+message
+                       text = "新竹版//贈送"+"查詢時間:"+DateTime.Now.AddHours(8).ToString()+"\n"+message
                    }
                 }
             };
@@ -137,7 +137,7 @@ namespace pttInfoCrawler
                         date = Convert.ToDateTime(date[0].InnerText.ToString()),
                         tweetCount = Convert.ToInt16(tweetCount)
                     };
-                    if (pttInfo.title.Contains("贈送") && !dayPttInfoTitleList.Contains(pttInfo.title))
+                    if (pttInfo.title.Contains("贈送") && !dayPttInfoTitleList.Contains(pttInfo.title) && !pttInfo.title.Contains("洽"))
                     {
                         pttInfoList.Add(pttInfo);
                         dayPttInfoList.Add(pttInfo);
@@ -151,9 +151,9 @@ namespace pttInfoCrawler
             }
             foreach (var info in pttInfoList)
             {
-                resultStr += info.date.ToString("m") + "\r\n" + info.title + "\n 推文數:" + info.tweetCount + "\r\n" + info.url + "\n";
+                resultStr +="貼文日期"+ info.date.ToString("MM/dd") + "\r\n" + info.title + "\n 推文數:" + info.tweetCount + "\r\n" + info.url + "\n";
             }
-            resultStr = "查詢//新竹版//贈送" + "\r\n" + resultStr;
+            //resultStr = "查詢//新竹版//贈送" + "\r\n" + resultStr;
 
             return resultStr;
         }
