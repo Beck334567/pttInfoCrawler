@@ -137,8 +137,14 @@ namespace pttInfoCrawler
                         date = Convert.ToDateTime(date[0].InnerText.ToString()),
                         tweetCount = Convert.ToInt16(tweetCount)
                     };
-                    if ((pttInfo.title.Contains("贈送")|| pttInfo.title.Contains("東門水餃")) && !dayPttInfoTitleList.Contains(pttInfo.title) && !pttInfo.title.Contains("洽") &&
-                        !pttInfo.title.Contains("已") && !pttInfo.title.Contains("Re"))
+                    if ((pttInfo.title.Contains("贈送")|| pttInfo.title.Contains("東門水餃")) && 
+                        !dayPttInfoTitleList.Contains(pttInfo.title) &&
+                        !pttInfo.title.Contains("洽") &&
+                        !pttInfo.title.Contains("恰") &&
+                        !pttInfo.title.Contains("暫") &&
+                        !pttInfo.title.Contains("送出") &&
+                        !pttInfo.title.Contains("已") && 
+                        !pttInfo.title.Contains("Re"))
                     {
                         pttInfoList.Add(pttInfo);
                         dayPttInfoList.Add(pttInfo);
