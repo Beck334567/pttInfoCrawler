@@ -51,16 +51,15 @@ namespace pttInfoCrawler
 
         public async void ExecuteTask(object state)
         {
-            var hsinchuResult = "";
-            //var hsinchuResult = GetHsinchuByTask();
-            //if (string.IsNullOrEmpty(hsinchuResult)) return;
+            var hsinchuResult = GetHsinchuByTask();
+            if (string.IsNullOrEmpty(hsinchuResult)) return;
 
             //利用 Interlocked 計數防止重複執行
             Interlocked.Increment(ref execCount);
             if (execCount == 1)
             {
-                var textMessage = CreateJsonMessage(hsinchuResult);
-                //await SendMessageAsync(textMessage);
+                //var textMessage = CreateJsonMessage(hsinchuResult);
+                await SendMessageAsync(hsinchuResult);
             }
             Interlocked.Decrement(ref execCount);
         }
@@ -170,7 +169,7 @@ namespace pttInfoCrawler
             }
             foreach (var info in pttInfoList)
             {
-                resultStr +="貼文日期 : "+ info.date.ToString("MM/dd") + "\r\n" + info.title + "\n 推文數:" + info.tweetCount + "\r\n" + info.url + "\n";
+                resultStr += "\n貼文日期 : " + info.date.ToString("MM/dd") + "\n" + info.title + "\n 推文數:" + info.tweetCount + "\n" + info.url + "\n";
             }
             //resultStr = "查詢//新竹版//贈送" + "\r\n" + resultStr;
 
