@@ -60,7 +60,7 @@ namespace pttInfoCrawler
             if (execCount == 1)
             {
                 var textMessage = CreateJsonMessage(hsinchuResult);
-                await SendMessageAsync(textMessage);
+                //await SendMessageAsync(textMessage);
             }
             Interlocked.Decrement(ref execCount);
         }
