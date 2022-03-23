@@ -33,7 +33,8 @@ namespace pttInfoCrawler
             services.AddMvc();
             services.Configure<LineSetting>(Configuration.GetSection("LineSetting"));
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
-            services.AddHostedService<TaskManager>();
+            services.AddHostedService<NotifyTaskManager>();
+            //services.AddHostedService<TaskManager>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });

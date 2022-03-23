@@ -24,7 +24,8 @@ namespace pttInfoCrawler
                     webBuilder.UseStartup<Startup>();
                 }).ConfigureServices(services =>
                 {
-                    services.AddHostedService<TaskManager>();
+                    services.AddHostedService<NotifyTaskManager>();
+                    //services.AddHostedService<TaskManager>();
                 });
     }
 }
