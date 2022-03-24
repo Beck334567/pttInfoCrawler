@@ -150,7 +150,6 @@ namespace pttInfoCrawler
                         tweetCount = Convert.ToInt16(tweetCount)
                     };
                     if ((pttInfo.title.Contains("贈送")|| pttInfo.title.Contains("東門水餃")) && 
-                        !dayPttInfoTitleList.Contains(pttInfo.title) &&
                         !dayPttInfoUrlList.Contains(pttInfo.url)&&
                         !pttInfo.title.Contains("洽") &&
                         !pttInfo.title.Contains("恰") &&
