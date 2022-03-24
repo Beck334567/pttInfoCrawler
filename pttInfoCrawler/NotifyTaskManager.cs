@@ -22,7 +22,7 @@ namespace pttInfoCrawler
         private int execCount = 0;
 
         public List<PttInfo> resultList = new List<PttInfo>();
-        public List<PttInfo> dayPttInfoList = new List<PttInfo>();
+        public static List<PttInfo> dayPttInfoList = new List<PttInfo>();
 
         public NotifyTaskManager()
         {
@@ -45,7 +45,7 @@ namespace pttInfoCrawler
             _timer = new Timer(ExecuteTask, null,
                 TimeSpan.Zero,
                 //設定時間
-                TimeSpan.FromSeconds(10));
+                TimeSpan.FromSeconds(30));
             return Task.CompletedTask;
         }
 
@@ -113,6 +113,7 @@ namespace pttInfoCrawler
             HtmlDocument doc = webClient.Load(HsinchuUrl);
             var pttInfoList = new List<PttInfo>();
             var dayPttInfoTitleList = dayPttInfoList.Select(x => x.title).ToList();
+            var dayPttInfoUrlList = dayPttInfoList.Select(x => x.url).ToList();
             for (int i = 2; i <= 30; i++)
             {
                 // 標題
@@ -150,6 +151,7 @@ namespace pttInfoCrawler
                     };
                     if ((pttInfo.title.Contains("贈送")|| pttInfo.title.Contains("東門水餃")) && 
                         !dayPttInfoTitleList.Contains(pttInfo.title) &&
+                        !dayPttInfoUrlList.Contains(pttInfo.url)&&
                         !pttInfo.title.Contains("洽") &&
                         !pttInfo.title.Contains("恰") &&
                         !pttInfo.title.Contains("暫") &&
