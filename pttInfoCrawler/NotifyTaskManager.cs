@@ -1,9 +1,11 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using Npgsql;
 using pttInfoCrawler.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -59,9 +61,36 @@ namespace pttInfoCrawler
             if (execCount == 1)
             {
                 //var textMessage = CreateJsonMessage(hsinchuResult);
+                //testdb();
                 await SendMessageAsync(hsinchuResult);
             }
             Interlocked.Decrement(ref execCount);
+        }
+
+        private void testdb()
+        {
+            String connectionString = "Server=ec2-44-197-94-126.compute-1.amazonaws.com;Database=d50j39gi33lgk3;User Id=reunrpslvjomhy;Password=bf6f8a58bdabef6cbf066595d34d478c65ba3c7b40a178739a1bf79e21cbcca0;SslMode=Require;Trust Server Certificate=true;";
+
+            NpgsqlConnection conn = new NpgsqlConnection(connectionString);
+
+            NpgsqlCommand cmd = new NpgsqlCommand("set client_encoding TO big5", conn);
+
+            conn.Open(); 
+
+            cmd.ExecuteNonQuery();
+            var sqlCommand = "select * from pttinfo;";
+            NpgsqlCommand command = new NpgsqlCommand(sqlCommand, conn);
+
+            NpgsqlDataAdapter adapter = new NpgsqlDataAdapter();
+
+            adapter.SelectCommand = command;
+            DataTable table = new DataTable();
+
+            table.Locale = System.Globalization.CultureInfo.InvariantCulture;
+
+            adapter.Fill(table);
+            var url = table.Rows[0]["url"];
+            
         }
 
         private string CreateJsonMessage(string message)
@@ -94,7 +123,7 @@ namespace pttInfoCrawler
 
                 {
 
-                    request.Headers.TryAddWithoutValidation("Authorization", $"Bearer dV8lQu4BTtChIBGe4r0LBZZ6HTwaZ0lvSdV47raywPF");
+                    request.Headers.TryAddWithoutValidation("Authorization", $"Bearer DDAGHquh90KklCeWWAOcYjP4UHKB0fH8dVFFLYQ6vEL");
 
                     request.Content = new StringContent($"message={message}");
 
