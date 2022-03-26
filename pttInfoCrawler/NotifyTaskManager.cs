@@ -1,7 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using Npgsql;
 using pttInfoCrawler.Model;
 using System;
 using System.Collections.Generic;
