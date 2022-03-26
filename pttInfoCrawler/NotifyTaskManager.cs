@@ -65,7 +65,7 @@ namespace pttInfoCrawler
             }
             Interlocked.Decrement(ref execCount);
         }
-
+        /*
         private void testdb()
         {
             String connectionString = "Server=ec2-44-197-94-126.compute-1.amazonaws.com;Database=d50j39gi33lgk3;User Id=reunrpslvjomhy;Password=bf6f8a58bdabef6cbf066595d34d478c65ba3c7b40a178739a1bf79e21cbcca0;SslMode=Require;Trust Server Certificate=true;";
@@ -91,7 +91,7 @@ namespace pttInfoCrawler
             var url = table.Rows[0]["url"];
             
         }
-
+        */
         private string CreateJsonMessage(string message)
         {
             //Myself : Uc50a95a9ba953789b4fdaeb713227780
@@ -121,7 +121,8 @@ namespace pttInfoCrawler
                 using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://notify-api.line.me/api/notify"))
 
                 {
-
+                    //DDAGHquh90KklCeWWAOcYjP4UHKB0fH8dVFFLYQ6vEL 姊
+                    //3tPPuAWfTMpWo4RJyk9RkHNi0XEbXenmDCA1EaNezXx 自己測試
                     request.Headers.TryAddWithoutValidation("Authorization", $"Bearer DDAGHquh90KklCeWWAOcYjP4UHKB0fH8dVFFLYQ6vEL");
 
                     request.Content = new StringContent($"message={message}");
