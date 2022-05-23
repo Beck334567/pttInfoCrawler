@@ -22,8 +22,8 @@ namespace pttInfoCrawler
         //private static List<SearchItem> SearchItemList;
         private int execCount = 0;
 
-        public List<PttInfo> resultList = new List<PttInfo>();
-        public static List<PttInfo> dayPttInfoList = new List<PttInfo>();
+        public List<PostInfo> resultList = new List<PostInfo>();
+        public static List<PostInfo> dayPttInfoList = new List<PostInfo>();
 
         public NotifyTaskManager()
         {
@@ -67,7 +67,6 @@ namespace pttInfoCrawler
             Interlocked.Decrement(ref execCount);
         }
 
-        
         private void insertDB()
         {
             String connectionString = "Server=ec2-44-197-94-126.compute-1.amazonaws.com;Database=d50j39gi33lgk3;User Id=reunrpslvjomhy;Password=bf6f8a58bdabef6cbf066595d34d478c65ba3c7b40a178739a1bf79e21cbcca0;SslMode=Require;Trust Server Certificate=true;";
@@ -92,7 +91,7 @@ namespace pttInfoCrawler
             adapter.Fill(table);
             var url = table.Rows[0]["url"];
         }
-        
+
         //[Line bot]
         private string CreateJsonMessage(string message)
         {
@@ -131,9 +130,9 @@ namespace pttInfoCrawler
             HtmlWeb webClient = new HtmlWeb();
             var HsinchuUrl = "https://www.ptt.cc/bbs/Hsinchu/index.html";
             HtmlDocument doc = webClient.Load(HsinchuUrl);
-            var pttInfoList = new List<PttInfo>();
-            var dayPttInfoTitleList = dayPttInfoList.Select(x => x.title).ToList();
-            var dayPttInfoUrlList = dayPttInfoList.Select(x => x.url).ToList();
+            var pttInfoList = new List<PostInfo>();
+            var dayPttInfoTitleList = dayPttInfoList.Select(x => x.Title).ToList();
+            var dayPttInfoUrlList = dayPttInfoList.Select(x => x.Url).ToList();
             for (int i = 2; i <= 30; i++)
             {
                 // 標題
@@ -162,21 +161,21 @@ namespace pttInfoCrawler
                     var last = url.LastIndexOf('"') - 9;
                     url = "https://www.ptt.cc/" + url.Substring(first, last);
 
-                    var pttInfo = new PttInfo()
+                    var pttInfo = new PostInfo()
                     {
-                        title = title[0].InnerText.ToString(),
-                        url = url,
-                        date = Convert.ToDateTime(date[0].InnerText.ToString()),
-                        tweetCount = Convert.ToInt16(tweetCount)
+                        Title = title[0].InnerText.ToString(),
+                        Url = url,
+                        Date = Convert.ToDateTime(date[0].InnerText.ToString()),
+                        TweetCount = Convert.ToInt16(tweetCount)
                     };
-                    if ((pttInfo.title.Contains("贈送") || pttInfo.title.Contains("東門水餃")) &&
-                        !dayPttInfoUrlList.Contains(pttInfo.url) &&
-                        !pttInfo.title.Contains("洽") &&
-                        !pttInfo.title.Contains("恰") &&
-                        !pttInfo.title.Contains("暫") &&
-                        !pttInfo.title.Contains("送出") &&
-                        !pttInfo.title.Contains("已") &&
-                        !pttInfo.title.Contains("Re"))
+                    if ((pttInfo.Title.Contains("贈送") || pttInfo.Title.Contains("東門水餃")) &&
+                        !dayPttInfoUrlList.Contains(pttInfo.Url) &&
+                        !pttInfo.Title.Contains("洽") &&
+                        !pttInfo.Title.Contains("恰") &&
+                        !pttInfo.Title.Contains("暫") &&
+                        !pttInfo.Title.Contains("送出") &&
+                        !pttInfo.Title.Contains("已") &&
+                        !pttInfo.Title.Contains("Re"))
                     {
                         pttInfoList.Add(pttInfo);
                         dayPttInfoList.Add(pttInfo);
@@ -190,7 +189,7 @@ namespace pttInfoCrawler
             }
             foreach (var info in pttInfoList)
             {
-                resultStr += "\n貼文日期 : " + info.date.ToString("MM/dd") + "\n" + info.title + "\n 推文數:" + info.tweetCount + "\n" + info.url + "\n";
+                resultStr += "\n貼文日期 : " + info.Date.ToString("MM/dd") + "\n" + info.Title + "\n 推文數:" + info.TweetCount + "\n" + info.Url + "\n";
             }
             //resultStr = "查詢//新竹版//贈送" + "\r\n" + resultStr;
 

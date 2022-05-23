@@ -7,8 +7,10 @@ namespace pttInfoCrawler.Model
     {
         [JsonProperty("id")]
         public string id { get; set; }
+
         [JsonProperty("type")]
         public LineMessageType type { get; set; }
+
         [JsonProperty("text")]
         public string text { get; set; }
     }

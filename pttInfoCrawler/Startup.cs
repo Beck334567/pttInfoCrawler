@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using pttInfoCrawler.Data;
+using pttInfoCrawler.Model;
 
 namespace pttInfoCrawler
 {
@@ -32,9 +34,9 @@ namespace pttInfoCrawler
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
             });
-            services.AddDbContext<LineDBContext>(builder =>
+            services.AddDbContext<ApplicationDbContext>(builder =>
             {
-                builder.UseNpgsql(Configuration.GetConnectionString("MyDb"),
+                builder.UseNpgsql(Configuration.GetConnectionString("LineDb"),
                     optionsBuilder =>
                     {
                         // Heroku PostgreSQL 必須使用 SSL
