@@ -191,7 +191,7 @@ namespace pttInfoCrawler
             {
                 resultStr += "\n貼文日期 : " + info.Date.ToString("MM/dd") + "\n" + info.Title + "\n 推文數:" + info.TweetCount + "\n" + info.Url + "\n";
             }
-            //resultStr = "查詢//新竹版//贈送" + "\r\n" + resultStr;
+            
 
             return resultStr;
         }
