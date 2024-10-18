@@ -18,7 +18,7 @@ namespace pttInfoCrawler
     {
         private static Timer _timer;
 
-        //todo 接到指令列清單
+        
         //private static List<SearchItem> SearchItemList;
         private int execCount = 0;
 
