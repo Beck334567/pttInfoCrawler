@@ -1,4 +1,4 @@
-﻿namespace pttInfoCrawler
+﻿namespace pttInfoCrawler.Model
 {
     public class LineSetting
     {

@@ -7,6 +7,7 @@ namespace pttInfoCrawler.Model
     {
         [JsonProperty("type")]
         public WebhookEventSource type { get; set; }
+
         [JsonProperty("userId")]
         public string userId { get; set; }
     }

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using pttInfoCrawler.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,10 +14,8 @@ namespace pttInfoCrawler.Controllers
     public class LineController : ControllerBase
     {
         [HttpPost]
-        //to do[LineVerifySignature]
         public async Task<IActionResult> Post(dynamic request)
         {
-            
             string x = Convert.ToString(request);
             var channelAccessToken = "c4RXeRfxeAqTmt81bq3AZH/0jSooqiUjxsHAoMGR6oHNV4alsM3UOP+h3gi8zH3SpW8EG5kpb4wmBH9EQGgn3+v4aBvNZxsEZ6xvd5bOCZgMv83vFNpGeln/Gwc/rYkygjShITKe3L275jjRkE2iSgdB04t89/1O/w1cDnyilFU=";
             // 收到訊息解成物件
@@ -74,7 +70,6 @@ namespace pttInfoCrawler.Controllers
                 return "尚未加入此版";
             }
 
-
             HtmlDocument doc = webClient.Load(requestUrl);
             var result = "";
             if (queryString == "新竹")
@@ -126,7 +121,6 @@ namespace pttInfoCrawler.Controllers
                 }
                 result = "查詢//LifeIsMoney//情報" + "\n" + result;
             }
-
 
             return result;
         }

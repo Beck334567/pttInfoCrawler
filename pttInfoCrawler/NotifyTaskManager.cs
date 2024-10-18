@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using Npgsql;
 using pttInfoCrawler.Model;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using System.Data;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,8 +22,8 @@ namespace pttInfoCrawler
         //private static List<SearchItem> SearchItemList;
         private int execCount = 0;
 
-        public List<PttInfo> resultList = new List<PttInfo>();
-        public static List<PttInfo> dayPttInfoList = new List<PttInfo>();
+        public List<PostInfo> resultList = new List<PostInfo>();
+        public static List<PostInfo> dayPttInfoList = new List<PostInfo>();
 
         public NotifyTaskManager()
         {
@@ -59,14 +59,15 @@ namespace pttInfoCrawler
             Interlocked.Increment(ref execCount);
             if (execCount == 1)
             {
+                //[Line bot]
                 //var textMessage = CreateJsonMessage(hsinchuResult);
-                //testdb();
+                //insertDB();
                 await SendMessageAsync(hsinchuResult);
             }
             Interlocked.Decrement(ref execCount);
         }
-        /*
-        private void testdb()
+
+        private void insertDB()
         {
             String connectionString = "Server=ec2-44-197-94-126.compute-1.amazonaws.com;Database=d50j39gi33lgk3;User Id=reunrpslvjomhy;Password=bf6f8a58bdabef6cbf066595d34d478c65ba3c7b40a178739a1bf79e21cbcca0;SslMode=Require;Trust Server Certificate=true;";
 
@@ -74,10 +75,10 @@ namespace pttInfoCrawler
 
             NpgsqlCommand cmd = new NpgsqlCommand("set client_encoding TO big5", conn);
 
-            conn.Open(); 
+            conn.Open();
 
             cmd.ExecuteNonQuery();
-            var sqlCommand = "select * from pttinfo;";
+            var sqlCommand = "insert INTO pttinfo(title,url,date) VALUES ('test2','test2,com','2022-03-29') ;";
             NpgsqlCommand command = new NpgsqlCommand(sqlCommand, conn);
 
             NpgsqlDataAdapter adapter = new NpgsqlDataAdapter();
@@ -89,37 +90,27 @@ namespace pttInfoCrawler
 
             adapter.Fill(table);
             var url = table.Rows[0]["url"];
-            
         }
-        */
+
+        //[Line bot]
         private string CreateJsonMessage(string message)
         {
             //Myself : Uc50a95a9ba953789b4fdaeb713227780
             //Sister : U13d5ce9b8bc7a642b96caa572a12b701
             var messageObject = new
             {
-
                 message = "test0323"
-               
             };
-          
+
             string jsonMessage = JsonConvert.SerializeObject(messageObject);
             return jsonMessage;
         }
 
         private async Task SendMessageAsync(string message)
         {
-            //HttpClient client = new HttpClient();
-            //var channelAccessToken = "dV8lQu4BTtChIBGe4r0LBZZ6HTwaZ0lvSdV47raywPF";
-            
-            //client.DefaultRequestHeaders.Add("Authorization", "Bearer " + channelAccessToken);
-            //HttpContent contentPost = new StringContent(message, Encoding.UTF8, "application/x-www-form-urlencoded");
-            //HttpResponseMessage responseMessage = await client.PostAsync("https://notify-api.line.me/api/notify", contentPost);
-            //
             using (var httpClient = new HttpClient())
             {
                 using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://notify-api.line.me/api/notify"))
-
                 {
                     //DDAGHquh90KklCeWWAOcYjP4UHKB0fH8dVFFLYQ6vEL 姊
                     //3tPPuAWfTMpWo4RJyk9RkHNi0XEbXenmDCA1EaNezXx 自己測試
@@ -132,7 +123,6 @@ namespace pttInfoCrawler
                     var response = await httpClient.SendAsync(request);
                 }
             }
-
         }
 
         private string GetHsinchuByTask()
@@ -140,9 +130,9 @@ namespace pttInfoCrawler
             HtmlWeb webClient = new HtmlWeb();
             var HsinchuUrl = "https://www.ptt.cc/bbs/Hsinchu/index.html";
             HtmlDocument doc = webClient.Load(HsinchuUrl);
-            var pttInfoList = new List<PttInfo>();
-            var dayPttInfoTitleList = dayPttInfoList.Select(x => x.title).ToList();
-            var dayPttInfoUrlList = dayPttInfoList.Select(x => x.url).ToList();
+            var pttInfoList = new List<PostInfo>();
+            var dayPttInfoTitleList = dayPttInfoList.Select(x => x.Title).ToList();
+            var dayPttInfoUrlList = dayPttInfoList.Select(x => x.Url).ToList();
             for (int i = 2; i <= 30; i++)
             {
                 // 標題
@@ -171,21 +161,21 @@ namespace pttInfoCrawler
                     var last = url.LastIndexOf('"') - 9;
                     url = "https://www.ptt.cc/" + url.Substring(first, last);
 
-                    var pttInfo = new PttInfo()
+                    var pttInfo = new PostInfo()
                     {
-                        title = title[0].InnerText.ToString(),
-                        url = url,
-                        date = Convert.ToDateTime(date[0].InnerText.ToString()),
-                        tweetCount = Convert.ToInt16(tweetCount)
+                        Title = title[0].InnerText.ToString(),
+                        Url = url,
+                        Date = Convert.ToDateTime(date[0].InnerText.ToString()),
+                        TweetCount = Convert.ToInt16(tweetCount)
                     };
-                    if ((pttInfo.title.Contains("贈送")|| pttInfo.title.Contains("東門水餃")) && 
-                        !dayPttInfoUrlList.Contains(pttInfo.url)&&
-                        !pttInfo.title.Contains("洽") &&
-                        !pttInfo.title.Contains("恰") &&
-                        !pttInfo.title.Contains("暫") &&
-                        !pttInfo.title.Contains("送出") &&
-                        !pttInfo.title.Contains("已") && 
-                        !pttInfo.title.Contains("Re"))
+                    if ((pttInfo.Title.Contains("贈送") || pttInfo.Title.Contains("東門水餃")) &&
+                        !dayPttInfoUrlList.Contains(pttInfo.Url) &&
+                        !pttInfo.Title.Contains("洽") &&
+                        !pttInfo.Title.Contains("恰") &&
+                        !pttInfo.Title.Contains("暫") &&
+                        !pttInfo.Title.Contains("送出") &&
+                        !pttInfo.Title.Contains("已") &&
+                        !pttInfo.Title.Contains("Re"))
                     {
                         pttInfoList.Add(pttInfo);
                         dayPttInfoList.Add(pttInfo);
@@ -199,9 +189,9 @@ namespace pttInfoCrawler
             }
             foreach (var info in pttInfoList)
             {
-                resultStr += "\n貼文日期 : " + info.date.ToString("MM/dd") + "\n" + info.title + "\n 推文數:" + info.tweetCount + "\n" + info.url + "\n";
+                resultStr += "\n貼文日期 : " + info.Date.ToString("MM/dd") + "\n" + info.Title + "\n 推文數:" + info.TweetCount + "\n" + info.Url + "\n";
             }
-            //resultStr = "查詢//新竹版//贈送" + "\r\n" + resultStr;
+            
 
             return resultStr;
         }
